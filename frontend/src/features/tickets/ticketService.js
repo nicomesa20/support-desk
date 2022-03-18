@@ -27,8 +27,37 @@ const getTickets = async (token) => {
   return response.data
 }
 
+// Get user ticket
+const getTicket = async (ticketId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response = await ticketsAPI.get(`/${ticketId}`, config)
+  return response.data
+}
+
+// Close user ticket
+const closeTicket = async (ticketId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response = await ticketsAPI.put(`/${ticketId}`,
+    { status: 'closed' }
+    , config
+  )
+  return response.data
+}
+
 const ticketService = {
   createTicket,
-  getTickets
+  getTickets,
+  getTicket,
+  closeTicket
 }
 export default ticketService
