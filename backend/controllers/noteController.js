@@ -26,9 +26,37 @@ const getNotes = asyncHandler(async (req, res) => {
     throw new Error('Not authorized')
   }
 
-  const notes = Note.find({ ticket: req.params.ticketId })
-  console.log(notes);
+  const notes = await Note.find({ ticket: req.params.ticketId })
   res.status(200).json(notes)
 })
 
-module.exports = { getNotes }
+
+// @desc    Create note for a ticket
+// @route   POST /api/tickets/:ticketId/notes
+// @access  Private
+const createNote = asyncHandler(async (req, res) => {
+  // Get user using id  in the JWT
+  const user = await User.findById(req.user.id)
+
+  if (!user) {
+    res.status(401)
+    throw new Error('User not found')
+  }
+
+  const ticket = await Ticket.findById(req.params.ticketId)
+
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401)
+    throw new Error('Not authorized')
+  }
+
+  const note = {
+    user: user._id,
+    ticket: ticket._id,
+    text: req.body.text
+  }
+  const createddNote = await Note.create(note)
+  res.status(201).json(createddNote)
+})
+
+module.exports = { getNotes, createNote }

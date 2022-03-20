@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 const noteSchema = mongoose.Schema({
-  User: {
-    type: mongoose.Types.ObjectId,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'user'
+    ref: 'User'
   },
   ticket: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Ticket'
   },
